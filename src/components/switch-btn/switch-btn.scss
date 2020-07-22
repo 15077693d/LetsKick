@@ -1,0 +1,41 @@
+$grey: #d2d8de;
+$light-yellow: #fae233;
+$ball-length: 60px;
+$button-width: 50px;
+$button-height: 30px;
+$toggle-diameter: 24px;
+$button-toggle-offset: ($button-height - $toggle-diameter)/2;
+.toggle{
+    transition: all 0.5s ease;
+    cursor: pointer;
+    position: relative;
+    display: inline-block;
+    background-color: $grey;
+    width: $button-width;
+    height: $button-height;
+    border-radius: 14pt;
+    &::after{
+        transition: all 0.5s ease;
+        content: "";
+        display: inline-block;
+        background-color: white;
+        width: $toggle-diameter;
+        height: $toggle-diameter;
+        border-radius: 50%;
+        position: absolute;
+        top: $button-toggle-offset;
+        left: $button-toggle-offset;
+        box-shadow: $button-toggle-offset 0 10px rgba(0, 0, 0, 0.151);
+    }
+}
+
+.toggle-active{
+    transition: all 0.5s ease;
+    background-color: $light-yellow;
+    &::after{
+        transition: all 0.5s ease;
+        background-color: white;
+        box-shadow: -$button-toggle-offset 0 10px rgba(0, 0, 0, 0.151);
+        transform: translateX($button-width - $button-toggle-offset - $button-toggle-offset - $toggle-diameter);
+    }
+}
