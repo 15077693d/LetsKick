@@ -21,7 +21,7 @@ class AuthCard extends Component {
             search: "",
             signup_warning: "",
             login_warning: "",
-            selectedDistrictIndex: "",
+            selectedDistrictIndex: "16",
             forgotPassword: false
         }
     }
@@ -46,9 +46,9 @@ class AuthCard extends Component {
         }
     }
 
-    handleClickForgotPassword = (bool)=>{
+    handleClickForgotPassword = (bool) => {
         this.setState({
-            forgotPassword:bool
+            forgotPassword: bool
         })
     }
 
@@ -60,9 +60,20 @@ class AuthCard extends Component {
             });
     }
 
-    handleSelectDistrict = (e) => {
-        const selectElement = e.target
-        const districtIndex = selectElement.selectedIndex - 1
+    handleClickDistrict = (e) => {
+        const muteOtherToggle = (value, selectElement) => {
+            const toggles = document.getElementsByClassName('toggle')
+            for (let i = 0; i < toggles.length; i++) {
+                if (toggles[i].id !== value) {
+                    toggles[i].classList.remove("toggle-active")
+                }
+            }
+        }
+        let selectElement = e.target
+        const districtIndex = selectElement.id
+        console.log(districtIndex)
+        console.log(selectElement.classList.contains("toggle-active"))
+        muteOtherToggle(districtIndex, selectElement)
         this.setState(
             {
                 selectedDistrictIndex: districtIndex,
@@ -72,7 +83,7 @@ class AuthCard extends Component {
 
     handleSwitchDistrict = (e) => {
         const selectElement = e.target
-        const districtIndex = selectElement.selectedIndex - 1
+        const districtIndex = selectElement.value
         const id = index2Id(districtIndex)
         getPitchesByDistrict(id, (list) => {
             this.setState({
@@ -102,14 +113,23 @@ class AuthCard extends Component {
                 case 1:
                     e.preventDefault()
                     this.props.switchPage();
-                    const districtId = index2Id(this.state["districtIndex"])
-                    getPitchesByDistrict(districtId, (list) => {
-                        this.setState({
-                            pitches: list
+                    if (this.state["districtIndex"] === "") {
+                        const districtId = index2Id(this.state["selectedDistrictIndex"])
+                        getPitchesByDistrict(districtId, (list) => {
+                            this.setState({
+                                pitches: list
+                            })
                         })
-                    });
-                    const districtRef = getRef(`district/${index2Id(this.state.districtIndex)}`)
-                    update(`user/${this.props.id}`, { district: districtRef });
+                    } else {
+                        const districtId = index2Id(this.state["districtIndex"])
+                        getPitchesByDistrict(districtId, (list) => {
+                            this.setState({
+                                pitches: list
+                            })
+                        });
+                        const districtRef = getRef(`district/${index2Id(this.state.districtIndex)}`)
+                        update(`user/${this.props.id}`, { district: districtRef });
+                    }
                     break;
                 case 2:
                     const favouritePitchesRef = this.state.favouritePitches.map((item) => getRef(`pitch/${item}`))
@@ -122,7 +142,7 @@ class AuthCard extends Component {
             e.preventDefault()
             if (this.state.forgotPassword) {
                 const email = this.state.login_email;
-                resetPassword(email, displayWarning,text['emailSent'][this.props.language]);
+                resetPassword(email, displayWarning, text['emailSent'][this.props.language]);
                 this.handleClickForgotPassword(false);
             } else {
                 const email = this.state.login_email;
@@ -135,14 +155,15 @@ class AuthCard extends Component {
 
     render() {
         let cardContent;
-        const districtOptions = text['district'][this.props.language].map((district, i) => <option key={`${i + 1}`} value={`${i + 1}`}> {district}</option>);
+        const districtOptions = text['district'][this.props.language].map((district, i) => <option key={`${i}`} value={`${i}`}> {district}</option>);
         const pitches = this.state.pitches.filter((doc) => filterSearch(doc, this.state.search, this.props.language)).map(
-            (doc, i) => <div key={i}><span className="name">{doc[`name_${this.props.language}`]}</span><SwitchButton handleClickPitch={this.handleClickPitch} id={doc.id} /></div>)
+            (doc, i) => <div key={i}><span className="name">{doc[`name_${this.props.language}`]}</span><SwitchButton handleClick={this.handleClickPitch} id={doc.id} /></div>)
+        const districts = text['district'][this.props.language].map((district, i) => <div key={`${i}`} ><span className="name">{district}</span><SwitchButton handleClick={this.handleClickDistrict} id={i} /></div>);
         if (this.props.action === "login") {
             if (this.state.forgotPassword) {
                 cardContent = [<div key="1" className="card-input">
                     <i className="fa fa-envelope"></i><input onChange={this.handleInputChange} id="email" value={this.state["login_email"]} type="email" placeholder={text["emailQuestion"][this.props.language]} required />
-                </div>,<div key="2" className="card-reminder"><span onClick={()=>this.handleClickForgotPassword(false)}>{text['back'][this.props.language]}</span></div>]
+                </div>, <div key="2" className="card-reminder"><span onClick={() => this.handleClickForgotPassword(false)}>{text['back'][this.props.language]}</span></div>]
             } else {
                 cardContent = [<div key="1" className="card-input">
                     <i className="fas fa-at"></i><input onChange={this.handleInputChange} id="email" value={this.state["login_email"]} type="email" placeholder={text["email"][this.props.language]} required />
@@ -151,7 +172,7 @@ class AuthCard extends Component {
                     <i className="fas fa-key"></i><input onChange={this.handleInputChange} id="password" value={this.state["login_password"]} type="password" placeholder={text["password"][this.props.language]} required />
                 </div>,
                 <div key="3" className="card-reminder">
-                    <span onClick={()=>this.handleClickForgotPassword(true)}>{text['forgotPassword'][this.props.language]}</span>
+                    <span onClick={() => this.handleClickForgotPassword(true)}>{text['forgotPassword'][this.props.language]}</span>
                 </div>,
                 <span key="4" className="warning">{this.state.login_warning}</span>]
             }
@@ -172,13 +193,14 @@ class AuthCard extends Component {
                     ]
                     break;
                 case 1:
-                    cardContent = <div className="card-input">
+                    cardContent = [<div key="1" className="card-input">
                         <i className="fas fa-house-user"></i>
-                        <select onChange={this.handleSelectDistrict} name="district" id="district" required>
-                            <option value="" disabled selected>{text['questionDistrict'][this.props.language]}</option>
-                            {districtOptions}
-                        </select>
-                    </div>
+                        <span>{text['questionDistrict'][this.props.language]}</span>
+                    </div>,
+                    <div key="2" id="dropdown">
+                        {districts}
+                    </div>]
+
                     break;
                 case 2:
                     cardContent = [<div key="1" className="card-input">
@@ -186,7 +208,7 @@ class AuthCard extends Component {
                         <span>{text['questionPitch'][this.props.language]}</span>
                     </div>,
                     <div key="2" id="dropdown">
-                        <div>
+                        <div className="search-district">
                             <div><span><i className="fas fa-search"></i><input onChange={this.handleSearch} value={this.state["search"]} type="text" placeholder={text['search'][this.props.language]} /></span></div>
                             <select onChange={this.handleSwitchDistrict} id="district" >
                                 <option value="" disabled selected>{text["district"][this.props.language][this.state["selectedDistrictIndex"]]}</option>

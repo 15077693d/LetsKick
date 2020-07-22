@@ -8,5 +8,5 @@ const handleClick = (e)=>{
         e.target.classList.add("toggle-active")
     }   
 }
-const SwitchButton = (props) => (<span onClick={(e)=>{props.handleClickPitch(e);handleClick(e);}} id={props.id} className="toggle"></span>)
+const SwitchButton = (props) => (<span onClick={(e)=>{props.handleClick(e);handleClick(e);}} id={props.id} className="toggle"></span>)
 export default SwitchButton;

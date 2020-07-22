@@ -24,6 +24,9 @@ $button-toggle-offset: ($button-height - $toggle-diameter)/2;
     font-weight: 400;
     width: 100%;
     .btn-group {
+      div{
+        box-shadow: 0px 5px 10px #00000056;
+      }
       color: white;
       margin-top: 10px;
       display: flex;

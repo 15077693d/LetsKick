@@ -27,6 +27,8 @@ $button-toggle-offset: ($button-height - $toggle-diameter)/2;
 }
 
 select{
+  -webkit-appearance: none;
+  background-color: white;
     color: $grey;
 }
 
@@ -42,6 +44,7 @@ button,select {
 }
 
 .card {
+  transition: all 300s;
     i{
       margin-top: 2px;
     }
@@ -104,28 +107,27 @@ button,select {
           
       }
       #dropdown{
-          display: flex;
-          flex-direction: column;
-          align-items: center;
+          // display: flex;
+          // flex-direction: column;
+          // align-items: center;
           .fa-search{
               margin-right: 10px;
           }
           div{
-              width: 100%;
+              padding: 0px 5%;
               justify-content: space-between;
               display: flex;
               align-items: center;
               margin-bottom:15px;
           }
-          div:nth-child(1){
+          .search-district{
+            padding: 0px 1%;
             div{
               margin: 0;
             }
             input{
-              width: 45%;
+              width: 60%;
             }
-            display: flex;
-            justify-content: space-between;
           }
         input{
             width: fit-content;
@@ -139,6 +141,7 @@ button,select {
         border-radius: 25px;
         height: 200px;
         overflow-y: scroll;
+        position:relative;
         background-color: white;
       }
       .card-input {
@@ -148,6 +151,7 @@ button,select {
         width: 80%;
       }
       #submit {
+        box-shadow: 0px 5px 10px #0000004d;
         z-index: 1;
         &:active {
           background: linear-gradient(
