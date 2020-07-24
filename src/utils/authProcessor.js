@@ -16,23 +16,26 @@ const signOut = (callback) => {
     firebase.auth().signOut().then(()=>{callback()})
 }
 
-const loginWithEmailAndPassword = (email,password,displayWarning,setId) => {
+const loginWithEmailAndPassword = (email,password,displayWarning) => {
     firebase.auth()
     .signInWithEmailAndPassword(email,password)
-    .then((doc)=>{setId(doc.user.uid)})
-    .catch((error)=> {displayWarning(error.message)})
+    .then(()=>{
+        window.location.reload();
+    })
+    .catch((error)=> {displayWarning(error.code)})
 
 }
+
 const signUpWithEmailAndPassword = (username, email, password,displayWarning,switchPage,setId) => {
     const auth = () => firebase.auth()
             .createUserWithEmailAndPassword(email, password)
             .then((doc)=>{addUser(doc.user.uid,email,username);switchPage(1);setId(doc.user.uid);})
-            .catch((error)=> {displayWarning(error.message)})
+            .catch((error)=> {displayWarning(error.code)})
 
     const checkUsername = (usernames) => {
         usernames = usernames.map((item) => item.toUpperCase())
         if (usernames.includes(username.toUpperCase())){
-            displayWarning("Username is already taken. Please enter a new username.")
+            displayWarning("auth/username-already-in-use")
         }else{
             auth()
         }
@@ -66,7 +69,7 @@ const authWithThirdParty = (type,callback1,callback2) => {
                             callback1(null)
                             callback2(id)
                         }else{
-                            callback2(id)
+                            window.location.reload()
                         }
                     };
                     get(`user/${id}`,afterGetCallback)
@@ -78,7 +81,7 @@ const resetPassword = (email,displayWarning,message) => {
     firebase.auth().sendPasswordResetEmail(email).then(()=>{
         displayWarning(message);
     }).catch((error)=>{
-        displayWarning(error.message);
+        displayWarning(error.code);
     })
 }
 export {resetPassword,signUpWithEmailAndPassword,authWithThirdParty,checkThirdPartySignIn,signOut,loginWithEmailAndPassword};

@@ -13,7 +13,7 @@ $button-toggle-offset: ($button-height - $toggle-diameter)/2;
 @mixin btn-style($background-color, $border, $width) {
     background-color: $background-color;
     padding: 15px;
-    justify-content: space-around;
+    justify-content: center;
     width: $width;
     margin-bottom: 20px;
     display: flex;
@@ -25,6 +25,9 @@ $button-toggle-offset: ($button-height - $toggle-diameter)/2;
     width: 100%;
     .btn-group {
       div{
+        i{
+          margin-right: 20px;
+        }
         box-shadow: 0px 5px 10px #00000056;
       }
       color: white;

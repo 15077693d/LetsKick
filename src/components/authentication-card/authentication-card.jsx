@@ -5,6 +5,8 @@ import SwitchButton from '../switch-btn/switch-btn';
 import { getPitchesByDistrict, update, getRef } from '../../utils/dataProcessor';
 import { index2Id, filterSearch } from '../../utils/util'
 import { signUpWithEmailAndPassword, loginWithEmailAndPassword, resetPassword } from '../../utils/authProcessor'
+import ErrorHeader from '../error-header/error-header'
+import CardInput from '../card-input/card-input'
 const text = authentication["AuthCard"];
 class AuthCard extends Component {
     constructor(props) {
@@ -25,6 +27,17 @@ class AuthCard extends Component {
             forgotPassword: false
         }
     }
+
+    clearStates = () => {
+        this.setState(
+            {
+                login_password: "",
+                signup_password: "",
+                signup_warning: "",
+                login_warning: "",
+            });
+    }
+
     handleSearch = (e) => {
         this.setState(
             {
@@ -49,11 +62,11 @@ class AuthCard extends Component {
     handleClickForgotPassword = (bool) => {
         this.setState({
             forgotPassword: bool
-        })
+        }, () => this.clearStates())
     }
 
     handleInputChange = (e) => {
-        let key = `${this.props.action}_${e.target.id}`
+        let key = e.target.id
         this.setState(
             {
                 [key]: e.target.value,
@@ -71,14 +84,7 @@ class AuthCard extends Component {
         }
         let selectElement = e.target
         const districtIndex = selectElement.id
-        console.log(districtIndex)
-        console.log(selectElement.classList.contains("toggle-active"))
         muteOtherToggle(districtIndex, selectElement)
-        this.setState(
-            {
-                selectedDistrictIndex: districtIndex,
-                districtIndex: districtIndex
-            });
     }
 
     handleSwitchDistrict = (e) => {
@@ -108,28 +114,34 @@ class AuthCard extends Component {
                     const username = this.state.signup_username
                     const email = this.state.signup_email;
                     const password = this.state.signup_password;
+                    this.clearStates();
                     signUpWithEmailAndPassword(username, email, password, displayWarning, this.props.switchPage, this.props.setId);
                     break;
                 case 1:
                     e.preventDefault()
-                    this.props.switchPage();
-                    if (this.state["districtIndex"] === "") {
-                        const districtId = index2Id(this.state["selectedDistrictIndex"])
-                        getPitchesByDistrict(districtId, (list) => {
-                            this.setState({
-                                pitches: list
-                            })
-                        })
-                    } else {
-                        const districtId = index2Id(this.state["districtIndex"])
-                        getPitchesByDistrict(districtId, (list) => {
-                            this.setState({
-                                pitches: list
-                            })
-                        });
-                        const districtRef = getRef(`district/${index2Id(this.state.districtIndex)}`)
-                        update(`user/${this.props.id}`, { district: districtRef });
+                    const activeElement =  document.querySelector('.toggle-active')
+                    const districtIndex = activeElement===null?"":activeElement.id
+                    const callback = () => {
+                        if (this.state["districtIndex"] === "") {
+                            displayWarning("null-district")
+                        } else {
+                            const districtId = index2Id(this.state["districtIndex"])
+                            getPitchesByDistrict(districtId, (list) => {
+                                this.setState({
+                                    pitches: list
+                                })
+                            });
+                            const districtRef = getRef(`district/${index2Id(this.state.districtIndex)}`)
+                            update(`user/${this.props.id}`, { district: districtRef });
+                            this.props.switchPage();
+                        }
                     }
+
+                    this.setState(
+                        {
+                            selectedDistrictIndex: districtIndex,
+                            districtIndex: districtIndex
+                        }, callback);
                     break;
                 case 2:
                     const favouritePitchesRef = this.state.favouritePitches.map((item) => getRef(`pitch/${item}`))
@@ -142,11 +154,11 @@ class AuthCard extends Component {
             e.preventDefault()
             if (this.state.forgotPassword) {
                 const email = this.state.login_email;
-                resetPassword(email, displayWarning, text['emailSent'][this.props.language]);
-                this.handleClickForgotPassword(false);
+                resetPassword(email, displayWarning, 'emailSent');
             } else {
                 const email = this.state.login_email;
                 const password = this.state.login_password;
+                this.clearStates();
                 loginWithEmailAndPassword(email, password, displayWarning, this.props.setId)
             }
 
@@ -155,59 +167,61 @@ class AuthCard extends Component {
 
     render() {
         let cardContent;
+        let errorHeader;
+        let emailClass;
+        let passwordClass;
+        let usernameClass;
         const districtOptions = text['district'][this.props.language].map((district, i) => <option key={`${i}`} value={`${i}`}> {district}</option>);
         const pitches = this.state.pitches.filter((doc) => filterSearch(doc, this.state.search, this.props.language)).map(
             (doc, i) => <div key={i}><span className="name">{doc[`name_${this.props.language}`]}</span><SwitchButton handleClick={this.handleClickPitch} id={doc.id} /></div>)
         const districts = text['district'][this.props.language].map((district, i) => <div key={`${i}`} ><span className="name">{district}</span><SwitchButton handleClick={this.handleClickDistrict} id={i} /></div>);
-        if (this.props.action === "login") {
-            if (this.state.forgotPassword) {
-                cardContent = [<div key="1" className="card-input">
-                    <i className="fa fa-envelope"></i><input onChange={this.handleInputChange} id="email" value={this.state["login_email"]} type="email" placeholder={text["emailQuestion"][this.props.language]} required />
-                </div>, <div key="2" className="card-reminder"><span onClick={() => this.handleClickForgotPassword(false)}>{text['back'][this.props.language]}</span></div>]
-            } else {
-                cardContent = [<div key="1" className="card-input">
-                    <i className="fas fa-at"></i><input onChange={this.handleInputChange} id="email" value={this.state["login_email"]} type="email" placeholder={text["email"][this.props.language]} required />
-                </div>,
-                <div key="2" className="card-input">
-                    <i className="fas fa-key"></i><input onChange={this.handleInputChange} id="password" value={this.state["login_password"]} type="password" placeholder={text["password"][this.props.language]} required />
-                </div>,
-                <div key="3" className="card-reminder">
-                    <span onClick={() => this.handleClickForgotPassword(true)}>{text['forgotPassword'][this.props.language]}</span>
-                </div>,
-                <span key="4" className="warning">{this.state.login_warning}</span>]
-            }
 
+        if (this.props.action === "login") {
+            errorHeader = this.state.login_warning === "" ? null : <ErrorHeader key="login_error" warning={text[this.state.login_warning][this.props.language]} />;
+            emailClass = this.state.login_warning.includes('user-not-found') ? "card-input error-input" : "card-input";
+            passwordClass = this.state.login_warning.includes('password') ? "card-input error-input" : "card-input";
+            if (this.state.forgotPassword) {
+                cardContent = [errorHeader, <CardInput key="1_login_a" class="card-input" icon="fa fa-envelope" handleChange={this.handleInputChange} id="login_email"
+                    value={this.state["login_email"]} type="email" placeholder={text["emailQuestion"][this.props.language]} />
+                    , <div key="2" className="card-reminder">
+                        <span onClick={() => this.handleClickForgotPassword(false)}>{text['back'][this.props.language]}</span>
+                    </div>]
+            } else {
+                cardContent = [errorHeader, <CardInput key="1_login_b" i="1" class={emailClass} icon="fas fa-at" handleChange={this.handleInputChange} id="login_email"
+                    value={this.state["login_email"]} type="email" placeholder={text["email"][this.props.language]} />,
+                    <CardInput key="2_login_b" class={passwordClass} icon="fas fa-key" handleChange={this.handleInputChange} id="login_password"
+                        value={this.state["login_password"]} type="password" placeholder={text["password"][this.props.language]} />,
+                    <div key="3)login_b" className="card-reminder">
+                        <span onClick={() => this.handleClickForgotPassword(true)}>{text['forgotPassword'][this.props.language]}</span>
+                    </div>]
+            }
         } else {
+            emailClass = this.state.signup_warning.includes('email') ? "card-input error-input" : "card-input";
+            usernameClass = this.state.signup_warning.includes('username') ? "card-input error-input" : "card-input";
             switch (this.props.page) {
                 case 0:
-                    cardContent = [<div key="1" className="card-input">
-                        <i className="far fa-user"></i><input onChange={this.handleInputChange} value={this.state["signup_username"]} id="username" minLength={6} maxLength={10} ref="username" type="text" placeholder={text['username'][this.props.language]} required />
-                    </div>,
-                    <div key="2" className="card-input">
-                        <i className="fas fa-at"></i><input onChange={this.handleInputChange} value={this.state["signup_email"]} id="email" type="email" placeholder={text['email'][this.props.language]} required />
-                    </div>,
-                    <div key="3" className="card-input">
-                        <i className="fas fa-key"></i><input onChange={this.handleInputChange} value={this.state["signup_password"]} id="password" minLength={6} type="password" placeholder={text['password'][this.props.language]} required />
-                    </div>,
-                    <span key="4" className="warning">{this.state.signup_warning}</span>
+                    console.log(this.state.signup_warning)
+                    errorHeader = this.state.signup_warning === "" ? null : <ErrorHeader key="0_signup_0" warning={text[this.state.signup_warning][this.props.language]} />;
+                    cardContent = [errorHeader, <CardInput key="1_signup_0" class={usernameClass} icon="far fa-user" handleChange={this.handleInputChange} id="signup_username"
+                        value={this.state["signup_username"]} type="text" placeholder={text["username"][this.props.language]} min={6} max={10} />,
+                        <CardInput key="2_signup_0" class={emailClass} icon="fas fa-at" handleChange={this.handleInputChange} id="signup_email"
+                            value={this.state["signup_email"]} type="email" placeholder={text["email"][this.props.language]} />,
+                        <CardInput key="3_signup_0" class="card-input" icon="fas fa-key" handleChange={this.handleInputChange} id="signup_password"
+                            value={this.state["signup_password"]} type="password" placeholder={text["password"][this.props.language]} min={6} />,
                     ]
                     break;
                 case 1:
-                    cardContent = [<div key="1" className="card-input">
-                        <i className="fas fa-house-user"></i>
-                        <span>{text['questionDistrict'][this.props.language]}</span>
-                    </div>,
-                    <div key="2" id="dropdown">
+                    errorHeader = this.state.signup_warning === "null-district" ? <ErrorHeader key="0_signup_1" warning={text[this.state.signup_warning][this.props.language]} /> : null;
+                    cardContent = [<CardInput key="1_signup_1" class="card-input" icon="fas fa-house-user" handleChange={this.handleInputChange}
+                        type="" placeholder={text["questionDistrict"][this.props.language]} />, errorHeader,
+                    <div key="1_signup_2" id="dropdown">
                         {districts}
                     </div>]
-
                     break;
                 case 2:
-                    cardContent = [<div key="1" className="card-input">
-                        <i className="fas fa-futbol"></i>
-                        <span>{text['questionPitch'][this.props.language]}</span>
-                    </div>,
-                    <div key="2" id="dropdown">
+                    cardContent = [<CardInput key="1_signup_2" class="card-input" icon="fas fa-futbol" handleChange={this.handleInputChange}
+                        type="" placeholder={text['questionPitch'][this.props.language]} />,
+                    <div key="2_signup_2" id="dropdown">
                         <div className="search-district">
                             <div><span><i className="fas fa-search"></i><input onChange={this.handleSearch} value={this.state["search"]} type="text" placeholder={text['search'][this.props.language]} /></span></div>
                             <select onChange={this.handleSwitchDistrict} id="district" >
@@ -217,7 +231,6 @@ class AuthCard extends Component {
                         </div>
                         {pitches}
                     </div>]
-
                     break;
                 default:
                     break;

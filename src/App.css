@@ -14,3 +14,9 @@ body {
 html, body {
   overflow-x: hidden;
 }
+
+button,
+select,input {
+  border: none;
+  outline: none;
+}

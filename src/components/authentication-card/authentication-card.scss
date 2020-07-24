@@ -1,9 +1,6 @@
 /* Variable */
-$light-yellow: #fae233;
 $blue: #247dec;
 $dark-yellow: #ffbc00;
-$facebook-blue: #3a599a;
-$google-red: #de4b39;
 $grey: #d2d8de;
 $ball-length: 60px;
 $button-width: 50px;
@@ -12,173 +9,138 @@ $toggle-diameter: 24px;
 $button-toggle-offset: ($button-height - $toggle-diameter)/2;
 
 @mixin btn-style($background-color, $border, $width) {
-    background-color: $background-color;
-    padding: 15px;
-    justify-content: space-around;
-    width: $width;
-    margin-bottom: 20px;
-    display: flex;
-    border: $border;
-    border-radius: 25px;
-  }
+  background-color: $background-color;
+  padding: 15px;
+  justify-content: space-around;
+  width: $width;
+  margin-bottom: 20px;
+  display: flex;
+  border: $border;
+  border-radius: 25px;
+  box-shadow: 0px 3px 10px #00000015;
+}
 
-::placeholder{
+select {
+  -webkit-appearance: none;
+  background-color: white;
   color: $grey;
 }
 
-select{
-  -webkit-appearance: none;
-  background-color: white;
-    color: $grey;
-}
-
 .active-title {
-    color: $blue;
-    border-bottom: solid $dark-yellow 2px;
+  color: $blue;
+  border-bottom: solid $dark-yellow 2px;
 }
 
-input,
-button,select {
-  border: none;
-  outline: none;
+
+
+#submit {
+  box-shadow: 0px 5px 10px #0000004d;
+  z-index: 1;
+  background: linear-gradient(
+    180deg,
+    rgba(29, 253, 247, 0.5) 0%,
+    rgba(158, 209, 144, 0.5) 52%,
+    rgba(193, 197, 116, 0.5) 66%,
+    rgba(252, 176, 69, 0.5) 90%
+  );
+  position: relative;
+  top: 20px;
+  width: $ball-length;
+  height: $ball-length;
+  border-radius: 50%;
+  i {
+    font-size: 20px;
+    color: white;
+  }
+}
+
+#dropdown {
+  .fa-search {
+    margin-right: 10px;
+  }
+  div {
+    padding: 0px 5%;
+    justify-content: space-between;
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+  .search-district {
+    padding: 0px 1%;
+    div {
+      margin: 0;
+    }
+    input {
+      width: 60%;
+    }
+  }
+  input {
+    width: fit-content;
+  }
+  .name {
+    width: 80%;
+  }
+  padding: 15px;
+  width: 80%;
+  border: $grey 1px solid;
+  border-radius: 25px;
+  height: 200px;
+  overflow-y: scroll;
+  position: relative;
+  background-color: white;
 }
 
 .card {
-  transition: all 300s;
-    i{
-      margin-top: 2px;
+  position: relative;
+  width: 100%;
+  margin-top: 30px;
+  margin-bottom: 50px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: white;
+  border-radius: 30px;
+  &:after {
+    position: absolute;
+    content: "";
+    width: $ball-length + 30;
+    height: $ball-length + 30;
+    top: 100%;
+    transform: translateY(-1 * $ball-length);
+    border-radius: 50%;
+    background-color: white;
+  }
+
+  .card-title {
+    span {
+      padding-bottom: 5px;
+      font-size: 120%;
+      font-weight: 700;
+      letter-spacing: 4px;
+      cursor: pointer;
     }
-    position: relative;
-    &:after {
-      position: absolute;
-      content: "";
-      width: $ball-length + 30;
-      height: $ball-length + 30;
-      top: 100%;
-      transform: translateY(-1 * $ball-length);
-      border-radius: 50%;
-      background-color: white;
-    }
-    width: 100%;
-    margin-top: 30px;
-    margin-bottom: 50px;
+    height: 70px;
+    width: 90%;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+  }
+
+  .card-content {
     display: flex;
     flex-direction: column;
     align-items: center;
-    background-color: white;
-    border-radius: 30px;
-    .card-title {
+    width: 100%;
+    .card-reminder {
       span {
-        padding-bottom: 5px;
-        font-size: 120%;
-        font-weight: 700;
-        letter-spacing: 4px;
         cursor: pointer;
-      }
-      height: 70px;
-      width: 90%;
-      display: flex;
-      justify-content: space-around;
-      align-items: center;
-    }
-    
-    .card-content {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      width: 100%;
-      .warning{
-        margin-top: 5px;
-        width: 80%;
-        text-align: left;
-          font-weight: 700;
-          color: #de4b39;
-      }
-      .card-reminder{
-        span{
-          cursor: pointer;
-          &:active{
-              color: #d2d8de7c;
-          }
-        }
-          display: flex;
-          width: 80%;
-          justify-content: flex-end;
-          
-      }
-      #dropdown{
-          // display: flex;
-          // flex-direction: column;
-          // align-items: center;
-          .fa-search{
-              margin-right: 10px;
-          }
-          div{
-              padding: 0px 5%;
-              justify-content: space-between;
-              display: flex;
-              align-items: center;
-              margin-bottom:15px;
-          }
-          .search-district{
-            padding: 0px 1%;
-            div{
-              margin: 0;
-            }
-            input{
-              width: 60%;
-            }
-          }
-        input{
-            width: fit-content;
-        }
-        .name{
-            width: 80%;
-        }
-        padding: 15px;
-        width: 80%;
-        border: $grey 1px solid,;
-        border-radius: 25px;
-        height: 200px;
-        overflow-y: scroll;
-        position:relative;
-        background-color: white;
-      }
-      .card-input {
-        @include btn-style(white, $grey 1px solid, 80%);
-      }
-      input {
-        width: 80%;
-      }
-      #submit {
-        box-shadow: 0px 5px 10px #0000004d;
-        z-index: 1;
         &:active {
-          background: linear-gradient(
-            0deg,
-            rgba(29, 253, 245, 0.5) 0%,
-            rgba(158, 209, 144, 0.5) 52%,
-            rgba(193, 197, 116, 0.5) 66%,
-            rgba(252, 176, 69, 0.5) 90%
-          );
-        }
-        background: linear-gradient(
-          180deg,
-          rgba(29, 253, 247, 0.5) 0%,
-          rgba(158, 209, 144, 0.5) 52%,
-          rgba(193, 197, 116, 0.5) 66%,
-          rgba(252, 176, 69, 0.5) 90%
-        );
-        position: relative;
-        top: 20px;
-        width: $ball-length;
-        height: $ball-length;
-        border-radius: 50%;
-        i {
-          font-size: 20px;
-          color: white;
+          color: #d2d8de7c;
         }
       }
+      display: flex;
+      width: 80%;
+      justify-content: flex-end;
     }
   }
-
+}

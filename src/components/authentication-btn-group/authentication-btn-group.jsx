@@ -7,7 +7,7 @@ const AuthBtnGroup = (props) => {
         props.switchAction(e,true,false)
     }
     const callback2 = (id)=>{
-        props.setId(id)
+        props.setIdUser(id)
     }
 
     return (<div className="other-methods">

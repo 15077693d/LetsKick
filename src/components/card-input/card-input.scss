@@ -1,0 +1,37 @@
+/* Variable */
+$grey: #d2d8de;
+
+@mixin btn-style($background-color, $border, $width) {
+  background-color: $background-color;
+  padding: 15px;
+  justify-content: space-around;
+  width: $width;
+  margin-bottom: 20px;
+  display: flex;
+  border: $border;
+  border-radius: 25px;
+  box-shadow: 0px 3px 10px #00000015;
+}
+
+::placeholder {
+  text-align: center;
+  color: $grey;
+}
+
+i{
+  margin-top: 2px;
+}
+
+.card-input {
+  width: 80%;
+  @include btn-style(white, $grey 1px solid, 80%);
+}
+
+.error-input {
+  border-color: #ffcec6;
+}
+
+.black-word{
+  border-color:#838586 ;
+  color: #838586;
+}

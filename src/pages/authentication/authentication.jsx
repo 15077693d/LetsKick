@@ -38,6 +38,7 @@ class Authentication extends Component {
                 id:"",
                 user:""
             })
+            window.location.reload()
         }
         signOut(callback)
     }
@@ -108,7 +109,7 @@ class Authentication extends Component {
                 <span className="sub-title">{authentication['subTitle'][this.state.language](this.state.action)}</span>
                 <AuthBtnGroup 
                     action={this.state.action} 
-                    setId={this.setIdUser}
+                    setIdUser={this.setIdUser}
                     switchAction={this.switchAction}
                     switchPage={this.switchPage}
                     />
