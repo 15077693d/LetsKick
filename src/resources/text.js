@@ -14,6 +14,10 @@ const authentication = {
         }
     },
     AuthCard: { 
+        "null-pitches":{
+            en:"Please select one pitch at least for your better user experience.",
+            tc:"請選擇最少一個球場以提高你的用户體驗。"
+        },
         "null-district":{
             en:"Please select district for your better user experience.",
             tc:"請選擇區域以提高你的用户體驗。"

@@ -1,7 +1,8 @@
 /* Variable */
 $blue: #247dec;
 $dark-yellow: #ffbc00;
-$grey: #d2d8de;
+// $grey: #d2d8de;
+$grey: #a9adb1;
 $ball-length: 60px;
 $button-width: 50px;
 $button-height: 30px;
@@ -30,7 +31,6 @@ select {
   color: $blue;
   border-bottom: solid $dark-yellow 2px;
 }
-
 
 
 #submit {
@@ -66,16 +66,16 @@ select {
     margin-bottom: 10px;
   }
   .search-district {
+    select{
+      width: 50px;
+    }
     padding: 0px 1%;
     div {
       margin: 0;
     }
     input {
-      width: 60%;
+      width: 50%;
     }
-  }
-  input {
-    width: fit-content;
   }
   .name {
     width: 80%;

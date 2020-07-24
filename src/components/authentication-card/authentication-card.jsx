@@ -74,7 +74,7 @@ class AuthCard extends Component {
     }
 
     handleClickDistrict = (e) => {
-        const muteOtherToggle = (value, selectElement) => {
+        const muteOtherToggle = (value) => {
             const toggles = document.getElementsByClassName('toggle')
             for (let i = 0; i < toggles.length; i++) {
                 if (toggles[i].id !== value) {
@@ -106,11 +106,10 @@ class AuthCard extends Component {
                 [key]: warning
             })
         }
-
-        if (this.props.action === "signup" & this.props.page <= 2) {
+        e.preventDefault()
+        if (this.props.action === "signup" & this.props.page <= 2) {    
             switch (this.props.page) {
                 case 0:
-                    e.preventDefault()
                     const username = this.state.signup_username
                     const email = this.state.signup_email;
                     const password = this.state.signup_password;
@@ -118,7 +117,6 @@ class AuthCard extends Component {
                     signUpWithEmailAndPassword(username, email, password, displayWarning, this.props.switchPage, this.props.setId);
                     break;
                 case 1:
-                    e.preventDefault()
                     const activeElement =  document.querySelector('.toggle-active')
                     const districtIndex = activeElement===null?"":activeElement.id
                     const callback = () => {
@@ -144,14 +142,20 @@ class AuthCard extends Component {
                         }, callback);
                     break;
                 case 2:
-                    const favouritePitchesRef = this.state.favouritePitches.map((item) => getRef(`pitch/${item}`))
-                    update(`user/${this.props.id}`, { favourite_pitches: favouritePitchesRef });
+                    console.log(this.state.favouritePitches)
+                    if(this.state.favouritePitches.length===0){
+                        console.log(this.state.favouritePitches)
+                        displayWarning("null-pitches")
+                    }else{
+                          const favouritePitchesRef = this.state.favouritePitches.map((item) => getRef(`pitch/${item}`))
+                          update(`user/${this.props.id}`, { favourite_pitches: favouritePitchesRef });
+                          window.location.reload()
+                    }
                     break;
                 default:
                     break;
             };
         } else {
-            e.preventDefault()
             if (this.state.forgotPassword) {
                 const email = this.state.login_email;
                 resetPassword(email, displayWarning, 'emailSent');
@@ -171,6 +175,7 @@ class AuthCard extends Component {
         let emailClass;
         let passwordClass;
         let usernameClass;
+        let dropdownClass;
         const districtOptions = text['district'][this.props.language].map((district, i) => <option key={`${i}`} value={`${i}`}> {district}</option>);
         const pitches = this.state.pitches.filter((doc) => filterSearch(doc, this.state.search, this.props.language)).map(
             (doc, i) => <div key={i}><span className="name">{doc[`name_${this.props.language}`]}</span><SwitchButton handleClick={this.handleClickPitch} id={doc.id} /></div>)
@@ -181,7 +186,8 @@ class AuthCard extends Component {
             emailClass = this.state.login_warning.includes('user-not-found') ? "card-input error-input" : "card-input";
             passwordClass = this.state.login_warning.includes('password') ? "card-input error-input" : "card-input";
             if (this.state.forgotPassword) {
-                cardContent = [errorHeader, <CardInput key="1_login_a" class="card-input" icon="fa fa-envelope" handleChange={this.handleInputChange} id="login_email"
+                console.log(emailClass,this.state.login_warning)
+                cardContent = [errorHeader, <CardInput key="1_login_a" class={emailClass} icon="fa fa-envelope" handleChange={this.handleInputChange} id="login_email"
                     value={this.state["login_email"]} type="email" placeholder={text["emailQuestion"][this.props.language]} />
                     , <div key="2" className="card-reminder">
                         <span onClick={() => this.handleClickForgotPassword(false)}>{text['back'][this.props.language]}</span>
@@ -211,17 +217,20 @@ class AuthCard extends Component {
                     ]
                     break;
                 case 1:
+                    dropdownClass = this.state.signup_warning === "null-district" ? "error-input" : "";
                     errorHeader = this.state.signup_warning === "null-district" ? <ErrorHeader key="0_signup_1" warning={text[this.state.signup_warning][this.props.language]} /> : null;
                     cardContent = [<CardInput key="1_signup_1" class="card-input" icon="fas fa-house-user" handleChange={this.handleInputChange}
                         type="" placeholder={text["questionDistrict"][this.props.language]} />, errorHeader,
-                    <div key="1_signup_2" id="dropdown">
+                    <div key="1_signup_2" className={dropdownClass} id="dropdown">
                         {districts}
                     </div>]
                     break;
                 case 2:
+                    dropdownClass = this.state.signup_warning === "null-pitches" ? "error-input" : "";
+                    errorHeader = this.state.signup_warning === "null-pitches" ? <ErrorHeader key="0_signup_1" warning={text[this.state.signup_warning][this.props.language]} /> : null;
                     cardContent = [<CardInput key="1_signup_2" class="card-input" icon="fas fa-futbol" handleChange={this.handleInputChange}
-                        type="" placeholder={text['questionPitch'][this.props.language]} />,
-                    <div key="2_signup_2" id="dropdown">
+                        type="" placeholder={text['questionPitch'][this.props.language]} />,errorHeader,
+                    <div key="2_signup_2" className={dropdownClass} id="dropdown">
                         <div className="search-district">
                             <div><span><i className="fas fa-search"></i><input onChange={this.handleSearch} value={this.state["search"]} type="text" placeholder={text['search'][this.props.language]} /></span></div>
                             <select onChange={this.handleSwitchDistrict} id="district" >
