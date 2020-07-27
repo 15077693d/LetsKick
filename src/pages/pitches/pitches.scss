@@ -1,0 +1,13 @@
+@mixin center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.pitch-background{
+    overflow-y: hidden;
+    height: 100vh;
+    position: relative;
+    flex-direction: column;
+    @include center()
+}

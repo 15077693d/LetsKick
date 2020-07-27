@@ -1,14 +1,5 @@
-$light-yellow: #fae233;
-$blue: #247dec;
-$dark-yellow: #ffbc00;
 $facebook-blue: #3a599a;
 $google-red: #de4b39;
-$grey: #d2d8de;
-$ball-length: 60px;
-$button-width: 50px;
-$button-height: 30px;
-$toggle-diameter: 24px;
-$button-toggle-offset: ($button-height - $toggle-diameter)/2;
 
 @mixin btn-style($background-color, $border, $width) {
     background-color: $background-color;
@@ -20,35 +11,26 @@ $button-toggle-offset: ($button-height - $toggle-diameter)/2;
     border: $border;
     border-radius: 25px;
   }
+
 .other-methods {
     font-weight: 400;
     width: 100%;
     .btn-group {
+      color: white;
+      margin-top: 10px;
+      display: flex;
+      justify-content: space-between;
       div{
+        cursor: pointer;
         i{
           margin-right: 20px;
         }
         box-shadow: 0px 5px 10px #00000056;
       }
-      color: white;
-      margin-top: 10px;
-      display: flex;
-      justify-content: space-between;
-      span {
-        position: relative;
-        bottom: 2px;
-      }
       div:nth-child(1) {
-        &:active {
-          background-color: #3a589a79;
-        }
-        cursor: pointer;
         @include btn-style($facebook-blue, none, 35%);
       }
       div:nth-child(2) {
-        &:active {
-          background-color: #de4c3970;
-        }
         cursor: pointer;
         @include btn-style($google-red, none, 35%);
       }

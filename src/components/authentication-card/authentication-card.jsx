@@ -186,7 +186,7 @@ class AuthCard extends Component {
             emailClass = this.state.login_warning.includes('user-not-found') ? "card-input error-input" : "card-input";
             passwordClass = this.state.login_warning.includes('password') ? "card-input error-input" : "card-input";
             if (this.state.forgotPassword) {
-                console.log(emailClass,this.state.login_warning)
+                console.log(emailClass + this.state.login_warning)
                 cardContent = [errorHeader, <CardInput key="1_login_a" class={emailClass} icon="fa fa-envelope" handleChange={this.handleInputChange} id="login_email"
                     value={this.state["login_email"]} type="email" placeholder={text["emailQuestion"][this.props.language]} />
                     , <div key="2" className="card-reminder">
