@@ -7,13 +7,13 @@
     justify-content: center;
     min-width: 200px;
     // max-width: 400px;
-    width: 80vw;
     position: relative;
     height: 70vh;
 }
 
-#next{
-    z-index: 10;
-    top: 105%;
+.next-container{
+    cursor: pointer;
     position: relative;
+    height: fit-content;
+    opacity: 0;
 }

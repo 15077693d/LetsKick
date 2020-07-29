@@ -5,9 +5,15 @@
 }
 
 .pitch-background{
-    overflow-y: hidden;
-    height: 100vh;
     position: relative;
     flex-direction: column;
     @include center()
+}
+
+.go-chatroom{
+    transition: all 0.2s;
+    position: absolute;
+    width: 150vw;
+    height: 100vh;
+    background-color: #00a2ffa2;
 }
