@@ -4,58 +4,88 @@ const db = firebase.firestore()
 const getRef = (ref) => {
     return db.doc(ref);
 }
-const getPitchesByDistrict = (districtId,callback) => {
-    let list=[];
-    db.collection("district").doc(districtId).get().then(doc => {
-        const maxIndex = doc.data()['pitches'].length
-        for(let i=0;i<maxIndex;i++){
-            doc.data()['pitches'][i].get().then(doc=>{
-                list = list.concat(doc.data());
-                if (i===maxIndex-1){
-                    callback(list)
-                }
+const getPitchesByDistrict = async (districtId) => {
+    let pitches = [];
+    let district = await get(`district/${districtId}`)
+    for (const pitchRef of district['pitches']){
+        await pitchRef.get().then(doc => {
+            pitches = pitches.concat(doc.data());
             })
         }
-      });
+    return pitches
 }
 
-const getUserNames = (callback) =>{
-    let usernames = []
-    db.collection("user").get().then(
+const getPitches = async() => {
+    let pitches = [] 
+    await db.collection('pitch').get().then(
         (querySnapshot) => {
             querySnapshot.forEach(
-                (doc)=>{
+                (doc) => {
+                    pitches = pitches.concat(doc.data())
+                }
+            )
+        }
+    )
+    return pitches
+}
+
+const getFavouritePitchesByUser = (userId, callback) => {
+    const ref = `user/${userId}`;
+    const getPitchesFromUserDoc = (userDoc) => {
+        let pitches = []
+        let pitchRefs = userDoc.data()['favourite_pitches']
+        for (let i = 0; i < pitchRefs.length; i++) {
+            pitchRefs.get().then(
+                doc => {
+                    pitches = pitches.concat(doc.data())
+                    if (i === pitchRefs.length) {
+                        callback(pitches)}
+                }
+            )
+        }
+    }
+    get(ref, getPitchesFromUserDoc)
+}
+
+const getUserNames = async () => {
+    let usernames = []
+    await db.collection("user").get().then(
+        (querySnapshot) => {
+            querySnapshot.forEach(
+                (doc) => {
                     const username = doc.data().username;
                     usernames = usernames.concat(username)
                 }
             )
-            callback(usernames);
-            }
+        }
     )
+    return usernames
 }
 
-const get = (ref,callback) => {
-    db.doc(ref).get().then((doc)=>{
-        
-        callback(doc)
+const get = async (ref) => {
+    let data;
+    await db.doc(ref).get().then((doc) => {
+        data = doc.data()
     })
+    return data
 }
 
-const update = (ref,object) =>{
+const update = (ref, object) => {
     db.doc(ref).update(object)
+    return true
 }
 
-const addUser = (id,email,username)=>{
+const addUser = (id, email, username) => {
     let user = {
-        id:id,
-        district:"",
-        email:email,
-        username:username,
-        favourite_pitches:[],
-        friend_requests:[],
-        friends:[]
+        id: id,
+        district: "",
+        email: email,
+        username: username,
+        favourite_pitches: [],
+        friend_requests: [],
+        friends: []
     }
     db.collection('user').doc(id).set(user);
 }
 
-export {getPitchesByDistrict,getUserNames,addUser,update,getRef,get};
+export { getPitchesByDistrict, getUserNames, addUser, update, getRef, get,getFavouritePitchesByUser,getPitches};

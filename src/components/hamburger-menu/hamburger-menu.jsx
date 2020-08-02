@@ -1,31 +1,32 @@
 import React from 'react';
-import {authentication} from '../../resources/text';
+import { hamburgerMenu } from '../../resources/text';
 import './hamburger-menu.scss';
-const text = authentication['HamburgerMenu']
+import { Link } from 'react-router-dom';
+
 const HamburgerMenu = (props) => {
-    const welcome = props.welcome===null?null:<li>{props.welcome}</li>;
-    const logout = props.id===""||props.page!==0?null:<label htmlFor="toggler"><li onClick={props.logout}>{text['logout'][props.language]}</li></label>;
+    const handleClick = () => {
+        document.querySelector("#toggler").click()
+    }
+    const welcome = props.username === "" ? null : <li>{hamburgerMenu["welcome"][props.language] + " " + props.username}</li>
+    const logout = props.username === "" ? null : <Link style={{ color: 'black', textDecoration: 'none' }} to="/"><li class="nav-item" onClick={props.logout}>{hamburgerMenu['logout'][props.language]}</li></Link>;
     return (<div className="header-container">
-    <input type="checkbox" id="toggler" />
-    <label htmlFor="toggler">
-        <div className="hambuger-container">
-            <span></span>
-            <span></span>
+        <input type="checkbox" id="toggler" />
+        <label htmlFor="toggler">
+            <div className="hambuger-container">
+                <span></span>
+                <span></span>
+            </div>
+        </label>
+        <div onClick={handleClick} className="nav-items">
+                <ul>
+                    {welcome}
+                    <li className="nav-item" onClick={props.switchLanguage} id="language">{hamburgerMenu['language'][props.language]}</li>
+                    <li className="nav-item" id='map'>{hamburgerMenu['map'][props.language]}</li>
+                    {logout}
+                </ul>
         </div>
-    </label>
-    <div className="nav-items">
-        <ul>
-            {welcome}
-            <label htmlFor="toggler">
-                <li onClick={props.switchLanguage} id="language">{text['language'][props.language]}</li>
-            </label>
-            <label htmlFor="toggler">
-                <li id='map'>{text['map'][props.language]}</li>
-            </label>
-            {logout}
-        </ul>
-    </div>
-</div>);
+
+    </div>);
 }
 
 export default HamburgerMenu;

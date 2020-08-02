@@ -1,3 +1,4 @@
+$grey: #a9adb1;
 @mixin center {
     display: flex;
     justify-content: center;
@@ -5,15 +6,57 @@
 }
 
 .pitch-background{
-    position: relative;
+    width: 100vw;
     flex-direction: column;
-    @include center()
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+.go-chatroom,.go-match{
+    z-index: 10;
+    font-size: medium;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    @include center();
+    position: absolute;
+    width: 100vw;
+    height: 100vh;
 }
 
 .go-chatroom{
-    transition: all 0.2s;
-    position: absolute;
-    width: 150vw;
-    height: 100vh;
-    background-color: #00a2ffa2;
+    background-color: #f7c930;
+}
+
+.go-match{
+    background-color: #00a2ff;
+}
+
+.go-text{
+    span:nth-child(1){
+        font-size: x-large;
+        font-weight: 700;
+        margin-bottom: 10px;
+    }
+    font-weight: 200;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.pitches-district-select-container{
+    i{
+        position: relative;
+        bottom: 2px;
+        font-size: 120%;
+        margin-left: 5px;
+        color: $grey;
+    }
+}
+
+.pitches-distrist-select{
+    background-color: transparent;
+    color: white;
+    font-size: 150%;
 }

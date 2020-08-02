@@ -11,11 +11,9 @@ $bottom-height:calc(100% - #{$top-height} - #{$center-height});
 
 .pitch-card{
     box-shadow: 0px 2px 5px #0000003a ;
-    // transition: all 1s;
     transition-property: opacity,z-index,top,width;
     transition-duration: 1s;
     min-width: 200px;
-    // max-width: 400px;
     cursor: pointer;
     scroll-snap-align: start;
     font-weight: 400;

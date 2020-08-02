@@ -3,13 +3,19 @@ import PitchCard from '../../components/pitch-card/pitch-card';
 import './pitch-card-group.scss'
 import { head2Tail } from '../../utils/util';
 import { ReactComponent as DownIcon } from './down.svg'
-const width = document.body.offsetWidth
+import {getPitches} from '../../utils/dataProcessor'
+
+const width = window.innerWidth
+const height = window.innerHeight;
+const topThreshold = 0.08*height
+const containerHeight = (height * 0.3 < 200 ? 200 : height * 0.3) + topThreshold*5.2
 const nextStyle = {
-    zIndex: 10,
+    zIndex: 5,
     opacity: 1,
-    top: `${(window.innerHeight * 0.3 < 200 ? 200 : window.innerHeight * 0.3) + 230}px`
+    top: `${(height * 0.3 < 200 ? 200 : height * 0.3) + topThreshold*4.7}px`
 }
 let timeOut;
+
 
 class PitchCardGroup extends Component {
     constructor(props, context) {
@@ -17,15 +23,21 @@ class PitchCardGroup extends Component {
         this.state = {
             activeCard:"",
             zIndex: [0, 1, 2, 3, 4, 3, 2],
-            name: [0, 1, 2, 3, 4, 5, 6],
             width: width < 768 ? ["68vw", "71vw", "74vw", "77vw", "80vw", "71vw", "68vw"] : ["34vw", "35.5vw", "37vw", "38.5vw", "40vw", "35.5vw", "34vw"],
             leftBase: width < 768 ? [6 * width * 0.01, 4.5 * width * 0.01, 3 * width * 0.01, 1.5 * width * 0.01, 0 * width * 0.01, 4.5 * width * 0.01, 6 * width * 0.01] :
                 [3 * width * 0.01, 2.25 * width * 0.01, 1.5 * width * 0.01, 0.75 * width * 0.01, 0 * width * 0.01, 2.25 * width * 0.01, 3 * width * 0.01],
-            opacity: [0.2, 0.3, 0.5, 0.6, 1, 0.3, 0.1],
-            top: [0, 50, 100, 150, 200, 230, 260],
+            opacity: [0.2, 0.3, 0.5, 0.6, 0.9, 0.3, 0.1],
+            top: [0, topThreshold*1, topThreshold*2, topThreshold*3, topThreshold*4, topThreshold*4.7, topThreshold*5.2],
             nextFlag: true,
             count: 0,
+            pitches:[]
         }
+    }
+
+    async componentDidMount(){
+        this.setState({
+            pitches:await getPitches()
+        })
     }
 
     setCheckActiveCard = (name,action) => {
@@ -64,12 +76,15 @@ class PitchCardGroup extends Component {
     }
 
     render() {
-        let pitchCards = this.state.name.map((name, i) => <PitchCard
+        const filteredPitches = this.state.pitches.slice(0,7)
+        let pitchCards = filteredPitches.map((pitch,i) => <PitchCard
             handleGoBackground = {this.props.handleGoBackground}
             handleActiveCard = {this.setCheckActiveCard}
             handleOnMouseDown={this.handleCardStart}
             handleOnMouseUp={this.handleCardEnd}
-            key={i} name={name}
+            key={pitch.id} 
+            pitch={pitch}
+            language={this.props.language}
             leftBase = {this.state.leftBase[i]}
             style={{
                 width: this.state.width[i],
@@ -79,7 +94,8 @@ class PitchCardGroup extends Component {
                 opacity: this.state.opacity[i],
             }} />)
         return (
-            <div style={{ width: width < 768 ? "80vw" : "40vw" }} className="pitch-card-container">
+            <div style={{ width: width < 768 ? "80vw" : "40vw",
+                          height: containerHeight }} className="pitch-card-container">
                 {pitchCards}
                 <div style={nextStyle} className="next-container">
                     <DownIcon id="next"

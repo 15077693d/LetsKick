@@ -1,5 +1,8 @@
-const authentication = {
-    HamburgerMenu: {
+const hamburgerMenu= {
+        welcome: {
+            en: "Hello!",
+            tc: "您好！"
+        },
         map: {
             en: 'MAP',
             tc: '地圖'
@@ -12,7 +15,16 @@ const authentication = {
             en: 'LOGOUT',
             tc: '登岀'
         }
-    },
+    }
+
+const pitches = {
+    right:{en:"Swipe Right",tc:"輕掃右面"},
+    kick:{en:"Waiting for a Match Now",tc:"我想齊人踢波啊！"},
+    left:{en:"Swipe left",tc:"輕掃左面"},
+    chat:{en:"Chatting with Kickers",tc:"同下波友傾下計先。"}
+}
+
+const authentication = {
     AuthCard: { 
         "null-pitches":{
             en:"Please select one pitch at least for your better user experience.",
@@ -25,6 +37,10 @@ const authentication = {
         emailSent:{
             en: "We have sent you an e-mail containing your password reset link...",
             tc: "請查看您電郵地址的收件匣並重設密碼..."
+        },
+        "auth/invalid-email":{
+            en:"The email address is invaild.",
+            tc:"此電子郵件地址格式不正確。"
         },
         "auth/internal-error":{
             en:"We're sorry, an internal error occurred. Please try agian.",
@@ -54,51 +70,17 @@ const authentication = {
             en: "SIGNUP",
             tc: "註冊"
         },
-        email: {
-            en: "Email",
-            tc: "電郵地址"
-        },
-        password: {
-            en: "Password",
-            tc: "密碼"
-        },
-        forgotPassword: {
-            en: "Forgot Password?",
-            tc: "忘記密碼？"
-        },
         username: {
             en: "User Name",
             tc: "用户名稱"
-        },
-        questionDistrict: {
-            en: "What district are you from?",
-            tc: "您住係邊一區咖？"
-        },
-        questionPitch: {
-            en: "Where do you play soccer usually?",
-            tc: "您平時去開邊度踢波咖？"
         },
         search: {
             en: "Search ...",
             tc: "輸入搜尋 ..."
         },
-        district: {
-            en: ["Central & Western", "Eastern", "Southern",
-                "Wan Chai", "Kowloon City", "Kwun Tong",
-                "Sham Shui Po", "Wong Tai Sin", "Yau Tsim Mong",
-                "Islands", "Kwai Tsing", "North",
-                "Sai Kung", "Sha Tin", "Tai Po",
-                "Tsuen Wan", "Tuen Mun", "Yuen Long"],
-            tc: ["中西區", "東區", "南區",
-                "灣仔", "九龍城", "觀塘",
-                "深水埗", "黃大仙", "油尖旺",
-                "離島", "葵青", "北區",
-                "西貢", "沙田", "大埔",
-                "荃灣", "屯門", "元朗"]
-        },
-        emailQuestion: {
-            en: "Enter your registered email address",
-            tc: "請輸入您已經註冊的電郵地址"
+        forgotPassword: {
+            en: "Forgot Password?",
+            tc: "忘記密碼？"
         },
         back:{
             en:"back",
@@ -108,11 +90,55 @@ const authentication = {
     subTitle: {
         en: (action) => action === "signup" ? "Or Signup with" : "Or Login with",
         tc: (action) => action === "signup" ? "使用其它註冊方法" : "使用其它登入方法"
-    },
-    welcome: {
-        en: "Hello!",
-        tc: "您好！"
-    },
-
+    }
 }
-export { authentication };
+
+const cardInput = {
+    username: {
+        en: "User Name",
+        tc: "用户名稱"
+    },
+    email: {
+        en: "Email",
+        tc: "電郵地址"
+    },
+    password: {
+        en: "Password",
+        tc: "密碼"
+    },
+    forgotPasswordEmail: {
+        en: "Enter your registered email address",
+        tc: "請輸入您已經註冊的電郵地址"
+    },
+    questionDistrict: {
+        en: "What district are you from?",
+        tc: "您住係邊一區咖？"
+    },
+    questionPitch: {
+        en: "Where do you play soccer usually?",
+        tc: "您平時去開邊度踢波咖？"
+    },
+}
+
+const districtSelect = {
+    favourite:{
+        en:"My Favourite",
+        tc:"我的球場"
+    },
+    district: {
+        en: {"00000":"Central & Western", "00001":"Eastern", "00002":"Southern",
+            "00003":"Wan Chai", "00004":"Kowloon City", "00005":"Kwun Tong",
+            "00006":"Sham Shui Po", "00007":"Wong Tai Sin", "00008":"Yau Tsim Mong",
+            "00009":"Islands", "00010":"Kwai Tsing", "00011":"North",
+            "00012":"Sai Kung", "00013":"Sha Tin", "00014":"Tai Po",
+            "00015":"Tsuen Wan", "00016":"Tuen Mun", "00017":"Yuen Long"},
+        tc: {"00000":"中西區", "00001":"東區", "00002":"南區",
+            "00003":"灣仔", "00004":"九龍城", "00005":"觀塘",
+            "00006":"深水埗", "00007":"黃大仙", "00008":"油尖旺",
+            "00009":"離島", "00010":"葵青", "00011":"北區",
+            "00012":"西貢", "00013":"沙田", "00014":"大埔",
+            "00015":"荃灣", "00016":"屯門", "00017":"元朗"}
+    },
+}
+
+export { authentication,districtSelect,hamburgerMenu,cardInput,pitches};
