@@ -22,7 +22,7 @@ class App extends Component {
   async componentDidMount() {
     let id = await getUserInfoByFirebase().catch(value => { console.log(value) })
     if (id) {
-      this.setIdUser(id)
+      await this.setIdUser(id)
     }
   }
 
@@ -42,6 +42,7 @@ class App extends Component {
     this.setState({
       user: user
     })
+    console.log(this.state)
     return true
   }
 
@@ -66,6 +67,7 @@ class App extends Component {
 
 
   render() {
+    
     return (
       <div className="App">
         <Router>
@@ -77,13 +79,20 @@ class App extends Component {
             logout={this.logout}
           />
           <Route exact path="/pitches">
+            {/* {this.state.user===""
+            ?<Authentication id={this.state.id} language={this.state.language} setIdUser={this.setIdUser}/>
+            :<Pitches user={this.state.user} language={this.state.language} updateUser={this.updateUser}/>}
+             */}
             <Pitches user={this.state.user} language={this.state.language} updateUser={this.updateUser}/>
           </Route>
           <Route exact path="/">
-            <Authentication id={this.state.id} language={this.state.language} setIdUser={this.setIdUser} />
+          {/* {this.state.user===""
+            ?<Authentication id={this.state.id} language={this.state.language} setIdUser={this.setIdUser}/>
+            :<Pitches user={this.state.user} language={this.state.language} updateUser={this.updateUser}/>} */}
+            <Authentication id={this.state.id} language={this.state.language} setIdUser={this.setIdUser}/>
           </Route>
           <Route exact path="/auth">
-            <Authentication />
+          <Authentication id={this.state.id} language={this.state.language} setIdUser={this.setIdUser}/>
           </Route>
         </Router>
       </div>

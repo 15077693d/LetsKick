@@ -4,19 +4,9 @@ const db = firebase.firestore()
 const getRef = (ref) => {
     return db.doc(ref);
 }
-const getPitchesByDistrict = async (districtId) => {
-    let pitches = [];
-    let district = await get(`district/${districtId}`)
-    for (const pitchRef of district['pitches']){
-        await pitchRef.get().then(doc => {
-            pitches = pitches.concat(doc.data());
-            })
-        }
-    return pitches
-}
 
-const getPitches = async() => {
-    let pitches = [] 
+const getPitches = async () => {
+    let pitches = []
     await db.collection('pitch').get().then(
         (querySnapshot) => {
             querySnapshot.forEach(
@@ -29,22 +19,14 @@ const getPitches = async() => {
     return pitches
 }
 
-const getFavouritePitchesByUser = (userId, callback) => {
-    const ref = `user/${userId}`;
-    const getPitchesFromUserDoc = (userDoc) => {
-        let pitches = []
-        let pitchRefs = userDoc.data()['favourite_pitches']
-        for (let i = 0; i < pitchRefs.length; i++) {
-            pitchRefs.get().then(
-                doc => {
-                    pitches = pitches.concat(doc.data())
-                    if (i === pitchRefs.length) {
-                        callback(pitches)}
-                }
-            )
-        }
+const getFavouitePitchesFromUser = async (user) => {
+    const pitchRefs = user.favourite_pitches
+    let pitches = []
+    for (let i=0;i<pitchRefs.length;i++){
+        let pitch = await get(`pitch/${pitchRefs[i].id}`)
+        pitches.push(pitch)
     }
-    get(ref, getPitchesFromUserDoc)
+    return pitches
 }
 
 const getUserNames = async () => {
@@ -88,4 +70,4 @@ const addUser = (id, email, username) => {
     db.collection('user').doc(id).set(user);
 }
 
-export { getPitchesByDistrict, getUserNames, addUser, update, getRef, get,getFavouritePitchesByUser,getPitches};
+export { getUserNames, addUser, update, getRef, get, getFavouitePitchesFromUser, getPitches };

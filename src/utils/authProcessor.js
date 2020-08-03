@@ -71,41 +71,6 @@ const authWithThirdParty = async (type) => {
     )
 }
 
-// const authWithThirdParty = async (type, callback1, callback2) => {
-//     let provider;
-//     switch (type) {
-//         case "facebook":
-//             provider = new firebase.auth.FacebookAuthProvider();
-//             break;
-
-//         case "google":
-//             provider = new firebase.auth.GoogleAuthProvider();
-//             break;
-
-//         default:
-//             break;
-//     }
-
-//     let user = await firebase.auth().signInWithPopup(provider).then(
-//         (result) => {
-//             return result.user
-//             const id = result.user.uid
-//             const email = result.user.email
-//             const username = result.user.displayName
-//             const afterGetCallback = (doc) => {
-//                 if (!doc.data()) {
-//                     addUser(id, email, username);
-//                     callback1(null)
-//                     callback2(id)
-//                 } else {
-//                     window.location.reload()
-//                 }
-//             };
-//             get(`user/${id}`, afterGetCallback)
-//         }
-//     )
-// }
-
 
 const resetPassword = (email) => {
     return firebase.auth().sendPasswordResetEmail(email)

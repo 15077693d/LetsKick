@@ -10,6 +10,8 @@ $bottom-height:calc(100% - #{$top-height} - #{$center-height});
 }
 
 .pitch-card{
+    position: relative;
+    margin-bottom: 10vh;
     box-shadow: 0px 2px 5px #0000003a ;
     transition-property: opacity,z-index,top,width;
     transition-duration: 1s;
@@ -19,11 +21,18 @@ $bottom-height:calc(100% - #{$top-height} - #{$center-height});
     font-weight: 400;
     font-size: 110%;
     height: 30vh;
-    min-height: 200px;
     color: $grey;
     border-radius: 30px;
     background-color: white;
+    width: 80vw;
 }
+
+@media(min-width:768px){
+    .pitch-card{
+        width: 30vw;
+    }
+}
+
 
 .pitch-card-top{
     height: $top-height;
@@ -42,13 +51,13 @@ $bottom-height:calc(100% - #{$top-height} - #{$center-height});
     @include center;
 }
 
-.pitch-card-heart{
+.pitch-card-heart-active{
     border: $warning-red 1px solid;
     background-color: $warning-red;
     color: white;
 }
 
-.pitch-card-heart-active{
+.pitch-card-heart{
     background-color: transparent;
     border: $grey 1px solid;
 }

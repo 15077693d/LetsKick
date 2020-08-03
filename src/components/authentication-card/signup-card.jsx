@@ -188,10 +188,10 @@ class SignUpCard extends Component {
                 errorHeader = this.state.warning === "null-pitches" ? <ErrorHeader key="error" warning={text[this.state.warning][this.props.language]} /> : null;
                 cardContent = [errorHeader,
                     <CardInput key="questionPitch" id="questionPitch" class="card-input" language={this.props.language} />,
-                    <div key="2_signup_2" className={dropdownClass} id="dropdown">
+                    <div key="dropdown" className={dropdownClass} id="dropdown">
                         <div className="search-district">
                             <div><span><i className="fas fa-search"></i><input onChange={this.handleSearch} value={this.state["search"]} type="text" placeholder={text['search'][this.props.language]} /></span></div>
-                            <DistrictSelect handleOnChange={this.handleSwitchDistrict} language={this.props.language} selectedDistrictId={this.state["selectedDistrictId"]} />
+                            <DistrictSelect handleChange={this.handleSwitchDistrict} language={this.props.language} selectedDistrictId={this.state["selectedDistrictId"]} />
                         </div>
                         {pitchElements}
                     </div>]

@@ -8,7 +8,7 @@ const DistrictSelect = (props) =>{
     const selectedElement = props.page==="pitches"?<option value="favourite"  selected>{districtSelect["favourite"][props.language]}</option>:
                                                 <option value="" disabled selected>{districtSelect["district"][props.language][props.selectedDistrictId]}</option>
 
-    return <select onChange={props.handleOnChange} id="district" className={props.class}>
+    return <select onChange={props.handleChange} id="district" className={props.class}>
                 {selectedElement}
                 {districtOptions}
             </select>

@@ -8,7 +8,7 @@ const HamburgerMenu = (props) => {
         document.querySelector("#toggler").click()
     }
     const welcome = props.username === "" ? null : <li>{hamburgerMenu["welcome"][props.language] + " " + props.username}</li>
-    const logout = props.username === "" ? null : <Link style={{ color: 'black', textDecoration: 'none' }} to="/"><li class="nav-item" onClick={props.logout}>{hamburgerMenu['logout'][props.language]}</li></Link>;
+    const logout = props.username === "" ? null : <Link style={{ color: 'black', textDecoration: 'none' }} to="/"><li className="nav-item" onClick={props.logout}>{hamburgerMenu['logout'][props.language]}</li></Link>;
     return (<div className="header-container">
         <input type="checkbox" id="toggler" />
         <label htmlFor="toggler">
