@@ -6,12 +6,14 @@ import { BrowserRouter as Router, Route } from 'react-router-dom'
 import Pitches from './pages/pitches/pitches';
 import React, { Component } from 'react';
 import { get, update } from './utils/dataProcessor';
+import LoadingAnimation from './components/loading-animation/loading-animation';
 
 class App extends Component {
 
   constructor(props) {
     super(props);
     this.state = {
+      loading: true,
       id: "",
       user: "",
       language: "tc"
@@ -24,15 +26,24 @@ class App extends Component {
     if (id) {
       await this.setIdUser(id)
     }
+    // this.setState({
+    //   loading:false
+    // })
   }
 
-  setIdUser = async (id) => {
+  setIdUser = async (id, signUp) => {
     if (id !== "") {
       let user = await get(`user/${id}`);
-      this.setState({
-        id: id,
-        user: user
-      })
+      if (signUp) {
+        this.setState({
+          id: id,
+        })
+      } else {
+        this.setState({
+          id: id,
+          user: user
+        })
+      }
     }
     return true
   }
@@ -42,7 +53,6 @@ class App extends Component {
     this.setState({
       user: user
     })
-    console.log(this.state)
     return true
   }
 
@@ -67,32 +77,32 @@ class App extends Component {
 
 
   render() {
-    
+    let element;
+    if (this.state.loading) {
+      element = <LoadingAnimation />
+    } else {
+      element = this.state.user === ""
+        ? <Authentication id={this.state.id} language={this.state.language} setIdUser={this.setIdUser} />
+        : <Pitches user={this.state.user} language={this.state.language} updateUser={this.updateUser} />
+    }
     return (
       <div className="App">
         <Router>
-          <HamburgerMenu
+          {this.state.loading?null:<HamburgerMenu
             id={this.state.id}
             username={this.state.user === "" ? "" : this.state.user.username}
             switchLanguage={this.switchLanguage}
             language={this.state.language}
             logout={this.logout}
-          />
+          />}
           <Route exact path="/pitches">
-            {/* {this.state.user===""
-            ?<Authentication id={this.state.id} language={this.state.language} setIdUser={this.setIdUser}/>
-            :<Pitches user={this.state.user} language={this.state.language} updateUser={this.updateUser}/>}
-             */}
-            <Pitches user={this.state.user} language={this.state.language} updateUser={this.updateUser}/>
+            {element}
           </Route>
           <Route exact path="/">
-          {/* {this.state.user===""
-            ?<Authentication id={this.state.id} language={this.state.language} setIdUser={this.setIdUser}/>
-            :<Pitches user={this.state.user} language={this.state.language} updateUser={this.updateUser}/>} */}
-            <Authentication id={this.state.id} language={this.state.language} setIdUser={this.setIdUser}/>
+            {element}
           </Route>
           <Route exact path="/auth">
-          <Authentication id={this.state.id} language={this.state.language} setIdUser={this.setIdUser}/>
+            <Authentication id={this.state.id} language={this.state.language} setIdUser={this.setIdUser} />
           </Route>
         </Router>
       </div>

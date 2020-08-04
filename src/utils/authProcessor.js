@@ -1,5 +1,5 @@
 import firebase from './firebaseSetup';
-import { getUserNames, addUser, get } from './dataProcessor'
+import { getUserNames, addUser } from './dataProcessor'
 
 const getUserInfoByFirebase = () => {
     let promise = new Promise(

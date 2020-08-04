@@ -32,6 +32,18 @@ class Pitches extends Component {
         }
     }
 
+    async componentDidMount(){
+        if (this.props.user!=="" && this.state.pitches.length===0){
+            console.log("Mount!")
+            const pitches = await getPitches()
+            const favouitePitches= await getFavouitePitchesFromUser(this.props.user)
+            this.setState({
+                pitches: pitches,
+                favouitePitches: favouitePitches,
+            })
+        }
+    }
+
 
     handleClickLike = (pitchId,type) => {
         switch (type) {
@@ -108,7 +120,7 @@ class Pitches extends Component {
             filteredPitches = this.state.selectedDistrictId === "favourite"
                 ? this.state.favouitePitches
                 : this.state.pitches.filter(pitch => pitch.district.id === this.state.selectedDistrictId)
-            filteredPitches.map(pitch=> {
+            filteredPitches.forEach(pitch=> {
                 pitch['favourite']=this.state.favouitePitches.map(favouitePitch=>favouitePitch.id).includes(pitch.id)
             })
         } else {

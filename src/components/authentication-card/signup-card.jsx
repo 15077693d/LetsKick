@@ -109,7 +109,7 @@ class SignUpCard extends Component {
                 this.clearStates();
                 try {
                     let id = await signUpWithEmailAndPassword(this.state.username, this.state.email, this.state.password)
-                    this.props.setIdUser(id)
+                    this.props.setIdUser(id,true)
                     this.props.switchPage(1)
                 } catch (errorMessage) {
                     displayWarning(errorMessage)
